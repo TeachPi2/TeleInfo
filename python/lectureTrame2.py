@@ -67,7 +67,7 @@ while True:
       Json(trame)
      except AttributeError:
       print "Trame vide" 
-     DB_Record(trame)  
+    # DB_Record(trame)  
 
    
      
