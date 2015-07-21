@@ -25,7 +25,7 @@
 
 
 from time import sleep, gmtime,localtime, strftime
-import json,serial,glob,sys,psycopg2
+import json,serial,glob,sys,MySQLdb as mdb
 
 
 
@@ -63,18 +63,18 @@ def Json (trame):
 
 def DB_Record(trame):
   ts=strftime("%Y-%m-%d %H:%M:%S", localtime())
-  conn=psycopg2.connect("dbname=mabase user=juju password=!Jbp1987*")
-  cur=conn.cursor()
-  cur.execute("CREATE TABLE IF NOT EXISTS EDF (id serial PRIMARY KEY, etiquette varchar, data varchar, ts timestamp);")
+  con=mdb.connect('localhost','Pi','juju','EDF')
+  cur=con.cursor()
+  cur.execute("CREATE TABLE IF NOT EXISTS EDF (id serial PRIMARY KEY, etiquette VARCHAR(25), data VARCHAR(25), ts timestamp);")
   sub=trame.split(chr(0x0a))
   for i in range(1,len(sub)):
     item=sub[i].split(' ')
-    cur.execute("INSERT INTO edf (etiquette , data , ts) VALUES (%s,%s,%s)",(item[0],item[1],ts))
+    cur.execute("INSERT INTO EDF (etiquette , data , ts) VALUES (%s,%s,%s)",(item[0],item[1],ts))
     
   
-  conn.commit()
+  con.commit()
   cur.close()
-  conn.close()
+  con.close()
 
 
 

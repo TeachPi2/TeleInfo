@@ -58,7 +58,7 @@ ser.flushInput()
 while True:
     
    
-    
+   
    n=ser.inWaiting()
    if n!=0:
      trame=(lectureTrame(ser))
@@ -67,8 +67,19 @@ while True:
       Json(trame)
      except AttributeError:
       print "Trame vide" 
-    # DB_Record(trame)  
-
+     except IndexError:
+      print "Erreur ecriture Json"
+     try:
+      DB_Record(trame)
+      #sleep(5)
+      
+     except AttributeError:
+      print "pas d'écriture dans la base"
+     except IndexError:
+      print "erreur écriture base"
+   
+       
+    
    
      
             
