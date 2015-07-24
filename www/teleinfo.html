@@ -47,8 +47,8 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Info puissance temps réel</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        <h1>Info compteur temps réel</h1>
+        <p class="lead">Cette page affiche vos informations de compteur EDF en temps réel.</p>
       </div>
 	<canvas id="mycanvas" width="765" height="189"></canvas>
         <div class="lead" id="placeholder"></div>
@@ -78,12 +78,16 @@
 
 
 	function myValue(){
-  		$.getJSON('realTime.json', function(text) {
+  		$.getJSON('stream/realTime.json', function(text) {
         	var output="<ul>";
 		var puissance=parseFloat(text.IINST)*230;
+		var HeuresCreuses=text.HCHC;
+		var HeuresPleines=text.HCHP;
+		var Pmax=parseFloat(text.IMAX)*230;
+                var Psousc=parseFloat(text.ISOUC)*230;
 	
         
-            	output+="<li> Puissance instantannée = "+puissance+ " Watts </li> ";
+            	output+="<li> Puissance instantannée = "+puissance+ " Watts </li><li>Puissance souscrite="+Psousc+" Watts</li><li>Total heures creuses="+HeuresCreuses+"</li><li>Total heures pleines="+HeuresPleines+"</li><li>Puissance max instantanée="+Pmax+" watts</li>";
        		line1.append(new Date().getTime(),puissance);
 		if(line1.length>10){
 		line1.length=0;

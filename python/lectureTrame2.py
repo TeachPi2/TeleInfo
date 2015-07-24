@@ -63,20 +63,21 @@ while True:
    if n!=0:
      trame=(lectureTrame(ser))
      print(trame)
+     print "fin de trame"
      try:
       Json(trame)
      except AttributeError:
       print "Trame vide" 
      except IndexError:
       print "Erreur ecriture Json"
-     try:
-      DB_Record(trame)
+     #try:
+      #DB_Record(trame)
       #sleep(5)
       
-     except AttributeError:
-      print "pas d'écriture dans la base"
-     except IndexError:
-      print "erreur écriture base"
+     #except AttributeError:
+      #print "pas d'écriture dans la base"
+     #except IndexError:
+      #print "erreur écriture base"
    
        
     

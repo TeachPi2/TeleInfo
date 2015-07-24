@@ -32,7 +32,7 @@ import json,serial,glob,sys,MySQLdb as mdb
 def lectureTrame(ser):
     """reconstitution de la trame EDF"""
     msg=ser.read()
-    print (hex(ord(msg)))
+    #print (hex(ord(msg)))
     if msg==chr(0x02) :
       print("\n"+strftime("%Y-%m-%d %H:%M:%S: Starting ", localtime())+"detection trame")
       trame=""
@@ -56,7 +56,7 @@ def Json (trame):
   for i in range(1,len(sub)):
     item=sub[i].split(' ')
     dict[item[0]]=item[1]
-  with open("/var/www/realTime.json","w") as file:
+  with open("/var/www/stream/realTime.json","w") as file:
    json.dump(dict,file,indent=4)
   file.close()
 
@@ -65,16 +65,19 @@ def DB_Record(trame):
   ts=strftime("%Y-%m-%d %H:%M:%S", localtime())
   con=mdb.connect('localhost','Pi','juju','EDF')
   cur=con.cursor()
-  cur.execute("CREATE TABLE IF NOT EXISTS EDF (id serial PRIMARY KEY, etiquette VARCHAR(25), data VARCHAR(25), ts timestamp);")
+  cur.execute("CREATE TABLE IF NOT EXISTS EDF (id serial PRIMARY KEY, IINST INT,ts timestamp);")
   sub=trame.split(chr(0x0a))
   for i in range(1,len(sub)):
     item=sub[i].split(' ')
-    cur.execute("INSERT INTO EDF (etiquette , data , ts) VALUES (%s,%s,%s)",(item[0],item[1],ts))
+   
+    if item[0]=='IINST':
+     
+     cur.execute("INSERT INTO EDF (IINST,ts) VALUES ('%d','%s');" % (int(item[1]),ts))
     
   
-  con.commit()
-  cur.close()
-  con.close()
+     con.commit()
+     cur.close()
+     con.close()
 
 
 
